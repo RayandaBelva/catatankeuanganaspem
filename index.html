@@ -2,84 +2,228 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Catatan Keuangan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catatan Keuangan Perjalanan Dinas</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <h1>Catatan Keuangan</h1>
-
-  <nav id="nav-tab">
-    <button type="button" class="tab-btn aktif" data-tab="beranda">Beranda</button>
-    <button type="button" class="tab-btn" data-tab="history">History</button>
-    <button type="button" class="tab-btn" data-tab="laporan">Laporan</button>
-    <button type="button" class="tab-btn" data-tab="pengaturan">Pengaturan</button>
-  </nav>
-
-  <!-- TAB BERANDA -->
-  <section id="beranda" class="tab-content aktif">
-    <form id="form-transaksi">
-      <select id="tipe">
-        <option value="pengeluaran">Pengeluaran</option>
-        <option value="pemasukan">Pemasukan</option>
-      </select>
-      <select id="kategori" required></select>
-      <input type="text" inputmode="numeric" id="jumlah" placeholder="Jumlah (Rp)" required>
-      <select id="akun">
-        <option value="cash">Cash</option>
-        <option value="bank">Bank</option>
-      </select>
-      <input type="date" id="tanggal" required>
-      <button type="submit">Tambah</button>
-    </form>
-    <h3>Total: Rp <span id="total">0</span></h3>
-  </section>
-
-  <!-- TAB HISTORY -->
-  <section id="history" class="tab-content">
-    <h2>Riwayat Transaksi</h2>
-    <ul id="list-transaksi"></ul>
-  </section>
-
-  <!-- TAB LAPORAN -->
-  <section id="laporan" class="tab-content">
-    <h2>Laporan Bulanan</h2>
-    <input type="month" id="pilih-bulan">
-
-    <div class="laporan-box">
-      <div class="kotak-pemasukan">
-        <p>Pemasukan</p>
-        <h3 id="total-pemasukan">Rp 0</h3>
-      </div>
-      <div class="kotak-pengeluaran">
-        <p>Pengeluaran</p>
-        <h3 id="total-pengeluaran">Rp 0</h3>
+  <div id="login-page" class="page">
+    <div class="login-card">
+      <div class="logo">💼</div>
+      <h1>Catatan Keuangan</h1>
+      <p class="muted">Perjalanan Dinas</p>
+      <form id="login-form">
+        <label>Username
+          <input id="login-username" required autocomplete="username" placeholder="Username">
+        </label>
+        <label>Password
+          <input id="login-password" type="password" required autocomplete="current-password" placeholder="Password">
+        </label>
+        <button class="btn primary full" type="submit">Masuk</button>
+        <p id="login-error" class="error"></p>
+      </form>
+      <div class="demo-box">
+        <strong>Akun awal</strong><br>
+        Admin: <code>admin</code> / <code>admin123</code>
       </div>
     </div>
+  </div>
 
-    <h2>Saldo per Akun</h2>
-    <div class="saldo-box">
-      <div class="kotak-akun">
-        <p>Cash</p>
-        <h3 id="saldo-cash">Rp 0</h3>
+  <div id="app-page" class="page hidden">
+    <header class="topbar">
+      <div>
+        <h1>💼 Catatan Keuangan</h1>
+        <span id="user-greeting" class="muted"></span>
       </div>
-      <div class="kotak-akun">
-        <p>Bank</p>
-        <h3 id="saldo-bank">Rp 0</h3>
-      </div>
-    </div>
+      <button id="logout-btn" class="btn secondary">Keluar</button>
+    </header>
 
-    <div class="kotak-total-semua">
-      <p>Total Semua Rekening</p>
-      <h3 id="saldo-total">Rp 0</h3>
-    </div>
-  </section>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="trips">Perjalanan Dinas</button>
+      <button class="tab-btn" data-tab="users" id="users-tab">Orang</button>
+      <button class="tab-btn" data-tab="reports">Laporan</button>
+      <button class="tab-btn" data-tab="settings">Pengaturan</button>
+    </nav>
 
-  <!-- TAB PENGATURAN -->
-  <section id="pengaturan" class="tab-content">
-    <h2>Pengaturan</h2>
-    <button type="button" id="btn-hapus-semua">Hapus Semua Data</button>
-  </section>
+    <main>
+      <section id="dashboard" class="tab-content active">
+        <div class="section-head">
+          <div><h2>Dashboard</h2><p class="muted">Ringkasan perjalanan yang Anda ikuti.</p></div>
+          <button class="btn primary" data-go="trips">+ Perjalanan Baru</button>
+        </div>
+        <div id="dashboard-cards" class="cards"></div>
+        <div id="dashboard-trips" class="trip-grid"></div>
+      </section>
+
+      <section id="trips" class="tab-content">
+        <div class="section-head">
+          <div><h2>Perjalanan Dinas</h2><p class="muted">Setiap perjalanan memiliki peserta dan transaksi sendiri.</p></div>
+          <button id="new-trip-btn" class="btn primary">+ Perjalanan Baru</button>
+        </div>
+        <div id="trip-list" class="trip-grid"></div>
+      </section>
+
+      <section id="users" class="tab-content">
+        <div class="section-head">
+          <div><h2>Data Orang</h2><p class="muted">Kelola orang yang dapat dipilih sebagai peserta perjalanan.</p></div>
+        </div>
+        <div class="panel">
+          <form id="user-form" class="inline-form">
+            <input type="hidden" id="user-id">
+            <input id="user-name" placeholder="Nama lengkap" required>
+            <input id="user-username" placeholder="Username" required>
+            <input id="user-password" type="password" placeholder="Password" required>
+            <button class="btn primary" type="submit">Simpan Orang</button>
+          </form>
+        </div>
+        <div id="user-list" class="panel-list"></div>
+      </section>
+
+      <section id="reports" class="tab-content">
+        <div class="section-head">
+          <div><h2>Laporan</h2><p class="muted">Rekap berdasarkan perjalanan dan peserta.</p></div>
+          <select id="report-trip"></select>
+        </div>
+        <div id="report-content"></div>
+      </section>
+
+      <section id="settings" class="tab-content">
+        <h2>Pengaturan</h2>
+        <div class="panel danger-panel">
+          <h3>Hapus seluruh data</h3>
+          <p class="muted">Menghapus pengguna, perjalanan, dan transaksi dari browser ini.</p>
+          <button id="reset-btn" class="btn danger">Hapus Semua Data</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal perjalanan -->
+  <div id="trip-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h2 id="trip-modal-title">Perjalanan Dinas Baru</h2><button class="icon-btn" data-close="trip-modal">×</button></div>
+      <form id="trip-form">
+        <input type="hidden" id="trip-id">
+        <label>Nama Perjalanan
+          <input id="trip-name" required placeholder="Contoh: Perjalanan Dinas Jakarta">
+        </label>
+        <div class="two-col">
+          <label>Lokasi
+            <input id="trip-location" required placeholder="Jakarta">
+          </label>
+          <label>No. Surat/SPPD (opsional)
+            <input id="trip-number" placeholder="Nomor surat">
+          </label>
+        </div>
+        <div class="two-col">
+          <label>Tanggal Mulai <input id="trip-start" type="date" required></label>
+          <label>Tanggal Selesai <input id="trip-end" type="date" required></label>
+        </div>
+        <label>Peserta Perjalanan</label>
+        <div id="participant-options" class="checkbox-grid"></div>
+        <p id="participant-error" class="error"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" data-close="trip-modal">Batal</button>
+          <button class="btn primary" type="submit">Simpan Perjalanan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal transaksi -->
+  <div id="transaction-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h2>Tambah Transaksi</h2><button class="icon-btn" data-close="transaction-modal">×</button></div>
+      <p id="transaction-trip-title" class="muted"></p>
+      <form id="transaction-form">
+        <input type="hidden" id="transaction-trip-id">
+        <label>Jenis
+          <select id="transaction-type">
+            <option value="expense">Pengeluaran</option>
+            <option value="income">Pemasukan</option>
+          </select>
+        </label>
+        <label>Kategori
+          <select id="transaction-category"></select>
+        </label>
+        <div class="two-col">
+          <label>Jumlah Total (Rp)
+            <input id="transaction-amount" inputmode="numeric" required placeholder="0">
+          </label>
+          <label>Tanggal
+            <input id="transaction-date" type="date" required>
+          </label>
+        </div>
+        <label>Foto Struk (opsional)
+          <input id="transaction-receipt" type="file" accept="image/*">
+        </label>
+        <div id="receipt-preview" class="file-preview"></div>
+        <label>Keterangan <span class="small muted">(wajib diisi apabila tidak ada foto struk)</span>
+          <input id="transaction-note" placeholder="Contoh: Hotel 2 malam">
+        </label>
+        <label>Dibayar/Diterima Oleh
+          <select id="transaction-payer"></select>
+        </label>
+        <div class="info-box">
+          <strong>Pembagian otomatis</strong>
+          <p>Jumlah transaksi akan dibagi rata kepada seluruh peserta perjalanan.</p>
+          <div id="split-preview"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" data-close="transaction-modal">Batal</button>
+          <button class="btn primary" type="submit">Simpan Transaksi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal detail perjalanan -->
+  <div id="detail-modal" class="modal hidden">
+    <div class="modal-card wide">
+      <div class="modal-head"><h2 id="detail-title"></h2><button class="icon-btn" data-close="detail-modal">×</button></div>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal pembayaran (mengurangi sisa "Dapat" dengan bukti tanda tangan PNG) -->
+  <div id="payment-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h2>Catat Pembayaran</h2><button class="icon-btn" data-close="payment-modal">×</button></div>
+      <p id="payment-context" class="muted"></p>
+      <form id="payment-form">
+        <input type="hidden" id="payment-trip-id">
+        <input type="hidden" id="payment-user-id">
+        <div class="two-col">
+          <label>Jumlah Dibayarkan (Rp)
+            <input id="payment-amount" inputmode="numeric" required placeholder="0">
+          </label>
+          <label>Tanggal
+            <input id="payment-date" type="date" required>
+          </label>
+        </div>
+        <label>Keterangan (opsional)
+          <input id="payment-note" placeholder="Contoh: Transfer BCA">
+        </label>
+        <label>Foto Bukti Tanda Tangan <span class="small muted">(wajib, format PNG)</span>
+          <input id="payment-proof" type="file" accept="image/png,.png" required>
+        </label>
+        <div id="payment-preview" class="file-preview"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" data-close="payment-modal">Batal</button>
+          <button class="btn primary" type="submit">Simpan Pembayaran</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal pratinjau gambar (struk / bukti tanda tangan) -->
+  <div id="image-modal" class="modal hidden">
+    <div class="modal-card image-modal-card">
+      <div class="modal-head"><h2>Pratinjau</h2><button class="icon-btn" data-close="image-modal">×</button></div>
+      <img id="image-modal-img" src="" alt="Pratinjau gambar">
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

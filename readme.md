@@ -1,51 +1,32 @@
-# 💰 Catatan Keuangan
+# Catatan Keuangan Perjalanan Dinas
 
-Aplikasi pencatat keuangan pribadi berbasis web. Catat pemasukan dan pengeluaran harian, pantau saldo per akun (Cash & Bank), dan lihat laporan bulanan — semua langsung dari browser, tanpa perlu install apa-apa.
+Versi ini menggunakan HTML, CSS, JavaScript Vanilla, dan **localStorage saja**.
 
-## ✨ Fitur
+## Cara menjalankan
+1. Buka folder ini di VS Code.
+2. Buka `index.html` dengan **Live Server**, atau klik dua kali `index.html`.
+3. Login menggunakan akun awal:
+   - Username: `admin`
+   - Password: `admin123`
 
-- **Beranda** — input transaksi baru (tipe, kategori, jumlah, akun, tanggal)
-- **Kategori dinamis** — pilihan kategori otomatis menyesuaikan tipe transaksi:
-  - Pengeluaran: Makan/Minum, Transportasi, Hiburan, Belanja, Tagihan, Kesehatan
-  - Pemasukan: Gaji, Bonus, Investasi, Hadiah, Lainnya
-- **History** — daftar lengkap semua transaksi yang pernah diinput, bisa dihapus per item
-- **Laporan Bulanan** — total pemasukan & pengeluaran, bisa difilter per bulan
-- **Saldo per Akun** — rincian saldo Cash, Bank, dan total gabungan keduanya
-- **Pengaturan** — hapus semua data (dengan konfirmasi)
-- Format angka otomatis pakai pemisah ribuan (contoh: `2.000.000`)
-- Data tersimpan di **localStorage** browser — tetap ada meski browser ditutup/refresh
+## Fitur
+- Login setiap orang.
+- Admin dapat menambah/mengubah/menghapus orang.
+- Membuat perjalanan dinas terpisah.
+- Memilih peserta untuk setiap perjalanan.
+- Pemasukan dan pengeluaran tersimpan berdasarkan perjalanan.
+- Setiap transaksi otomatis dihitung porsinya berdasarkan jumlah peserta.
+- **Foto struk per transaksi**: setiap transaksi bisa dilampiri foto struk. Jika tidak ada struk, kolom Keterangan wajib diisi sebagai gantinya.
+- **Rekap "Dapat" per orang per perjalanan**: setiap peserta punya nilai "Dapat" (porsi pemasukan − porsi pengeluaran) di tiap perjalanan, ditotal juga di halaman Laporan untuk seluruh perjalanan.
+- **Pencatatan pembayaran**: nilai "Dapat" bisa dikurangi dengan mencatat pembayaran (jumlah, tanggal, keterangan) yang **wajib disertai foto bukti tanda tangan berformat PNG**. Sisa yang belum dibayar otomatis terhitung, dan riwayat pembayaran (dengan thumbnail bukti) tersimpan di halaman Detail perjalanan.
+- Laporan per orang.
+- Data tersimpan di browser melalui localStorage.
+- Tidak membutuhkan Node.js, database, atau backend.
 
-## 🛠️ Tech Stack
+## Cara pakai fitur baru
+1. **Tambah transaksi dengan struk**: buka Detail perjalanan → "+ Tambah" → isi form → unggah "Foto Struk", atau kosongkan foto lalu isi "Keterangan".
+2. **Catat pembayaran**: buka Detail perjalanan → pada tabel "Dapat & Pembayaran per Orang" klik tombol **Bayar** di baris orang yang dibayar → isi jumlah, tanggal, keterangan → unggah **foto bukti tanda tangan (harus .png)** → Simpan. Sisa akan otomatis berkurang, dan riwayatnya muncul di bawah tabel.
+3. **Lihat total per orang**: buka tab Laporan. Pilih "Semua Perjalanan" untuk melihat total Dapat / Sudah Dibayar / Sisa akumulasi seluruh perjalanan, atau pilih satu perjalanan untuk melihat rekapnya saja.
 
-- HTML
-- CSS
-- JavaScript (Vanilla, tanpa framework)
-
-## 🚀 Cara Menjalankan
-
-1. Clone repo ini:
-   ```bash
-   git clone https://github.com/Adiatma07/catatan_keuangan.git
-   ```
-2. Buka folder project di code editor (misal VS Code)
-3. Buka file `index.html` menggunakan extension **Live Server**, atau buka langsung file `index.html` di browser
-
-## 📂 Struktur File
-
-```
-├── index.html   # Struktur halaman & navigasi tab
-├── style.css    # Tampilan/desain
-└── script.js    # Logic aplikasi (input, hitung total, laporan, dll)
-```
-
-## 📌 Rencana Pengembangan
-
-- [ ] Edit transaksi (saat ini hanya bisa tambah & hapus)
-- [ ] Grafik visualisasi pengeluaran per kategori
-- [ ] Filter/pencarian di tab History
-- [ ] Set budget/target bulanan per kategori
-- [ ] Export data ke CSV
-
-## 📄 Lisensi
-
-Proyek ini dibuat untuk keperluan belajar pribadi mungkin akan ada pengembangan lebih lanjut dengan tujuan pembelajaran.
+## Catatan localStorage
+Data hanya tersimpan pada browser/perangkat tempat aplikasi digunakan. Login ini cocok untuk prototipe atau penggunaan lokal, bukan sistem multi-perangkat yang membutuhkan sinkronisasi.
